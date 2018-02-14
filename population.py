@@ -20,6 +20,12 @@ class Population(object):
         for x in range (numPoblacion):
             self.population.append(DNA(len(self.target)))
 
+    def __str__(self):
+        aux = "Target: \n" + str(self.target) + "\n"
+        aux += "Best: \n" + str(self.best) + "\n"
+        aux += "Generations: \n" + str(self.generations)
+        return aux
+
 
     def calcFitness(self):
         self.best = None
@@ -46,9 +52,7 @@ class Population(object):
                 self.best = _dna.genes
 
             fitness = self.custom_map(_dna.fitness, 0, maxFitness, 0, 1)
-            n = floor(fitness * 100)
-            # print("numero")
-            # print(n)
+            n = floor(fitness)
 
             for val in range(n):
                 self.matingPool.append(_dna)
@@ -68,9 +72,10 @@ class Population(object):
         for i in range(len(self.population)):
             count = 0
             for j in range(len(self.target)):
-                if self.population[i].genes[j]["r"] == self.target[j]["r"] and self.population[i].genes[j]["g"] == self.target[j]["g"] and self.population[i].genes[j]["b"] == self.target[j]["b"]:
-                    count += 1
-            if count == len(self.target):
+                for k in range(len(self.target[j])):
+                    if self.population[i].genes[j][k]["r"] == self.target[j][k]["r"] and self.population[i].genes[j][k]["g"] == self.target[j][k]["g"] and self.population[i].genes[j][k]["b"] == self.target[j][k]["b"]:
+                        count += 1
+            if count == (len(self.target) * len(self.target[0])):
                 self.finished = True
 
     def isFinished(self):
@@ -81,5 +86,5 @@ class Population(object):
 
     def custom_map(self, value, start1, stop1, start2, stop2):
         param1 = (100/(stop1 - start1) * value)/100
-        res = (start2 + (100/(stop2 - start2))*param1)/100
+        res = (start2 + (100/(stop2 - start2))*param1)
         return res
