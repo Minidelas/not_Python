@@ -34,7 +34,7 @@ class Population(object):
             if self.best and _dna.fitness > self.best.fitness:
                 self.best_fitness = self.best.fitness
                 self.best = _dna
-            elif self.best == None:
+            elif not self.best:
                 self.best = _dna
         if len(self.arrBest) > self.muestreo:
             self.arrBest.pop(0)
@@ -69,20 +69,20 @@ class Population(object):
         self.generations += 1
 
     def evaluate(self):
-        for i in range(len(self.population)):
+        for _dna in self.population:
             count = 0
             for j in range(len(self.target)):
                 for k in range(len(self.target[j])):
-                    if self.population[i].genes[j][k]["r"] == self.target[j][k]["r"] and self.population[i].genes[j][k]["g"] == self.target[j][k]["g"] and self.population[i].genes[j][k]["b"] == self.target[j][k]["b"]:
+                    red = _dna.genes[j][k]["r"] == self.target[j][k]["r"]
+                    green = _dna.genes[j][k]["g"] == self.target[j][k]["g"]
+                    blue = _dna.genes[j][k]["b"] == self.target[j][k]["b"]
+                    if red and green and blue:
                         count += 1
             if count == (len(self.target) * len(self.target[0])):
                 self.finished = True
 
     def isFinished(self):
         return self.finished
-
-    def dibujar(self):
-        pass
 
     def custom_map(self, value, start1, stop1, start2, stop2):
         param1 = (100/(stop1 - start1) * value)/100
